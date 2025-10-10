@@ -1,11 +1,8 @@
 package controllers;
 
-import models.BCP;
-import models.ProcessosBloqueados;
-import models.ProcessosProntos;
-import models.processos.Estado;
-import models.processos.comandos.Comando;
-import models.processos.comandos.TipoComando;
+import models.*;
+import models.processos.*;
+import models.processos.comandos.*;
 
 import java.util.HashMap;
 import java.util.ArrayList;
