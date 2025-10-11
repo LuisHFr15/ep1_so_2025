@@ -30,9 +30,6 @@ public class TabelaDeProcessos {
     private ArrayList<TrocaDeProcessos> trocasDeProcessos;
     private ArrayList<Integer> instrucoesExecutadas;
 
-    // da tabela de processos
-    // se necessário: reaver a lógica das trocas e instruções executadas
-
 
     public TabelaDeProcessos() {
         this.listaProcessos = new ArrayList<BCP>();
@@ -40,6 +37,11 @@ public class TabelaDeProcessos {
         this.listaBloqueados = new ProcessosBloqueados();
         this.trocasDeProcessos = new ArrayList<TrocaDeProcessos>();
         this.instrucoesExecutadas = new ArrayList<Integer>();
+    }
+
+    public void adicionaProcesso(BCP processo) {
+        this.listaProcessos.add(processo);
+        this.listaProntos.adicionaProcesso(processo);
     }
 
     public BCP pegaProximoProcessoDaFila() {

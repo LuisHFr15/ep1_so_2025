@@ -20,6 +20,12 @@ public class SegmentoTexto {
         this.instrucoes.add(instrucao);
     }
 
+    public String pegaInstrucaoAuxiliar() {
+        String nomeProcesso = this.instrucoes.get(0);
+        this.instrucoes.remove(0);
+        return nomeProcesso;
+    }
+
     public ContadorDoPrograma criaContadorDoPrograma() {
         ContadorDoPrograma contador = new ContadorDoPrograma();
         for (String instrucao : this.instrucoes) {
