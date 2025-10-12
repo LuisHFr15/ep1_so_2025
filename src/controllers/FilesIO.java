@@ -31,7 +31,7 @@ public class FilesIO {
         Path path = Paths.get("programas");
         HashMap<String, SegmentoTexto> processos = new HashMap<String, SegmentoTexto>();
         try(Stream<Path> paths = Files.list(path)) {
-            paths.sorted().forEach(filePath -> {
+            paths.forEach(filePath -> {
                 try {
                     SegmentoTexto processo = leArquivo(filePath);
                     processos.put(filePath.getFileName().toString(), processo);

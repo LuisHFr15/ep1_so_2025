@@ -1,10 +1,13 @@
 package models;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class ProcessosBloqueados {
     // processo : tempo de espera
-    private HashMap<BCP, Integer> listaProcessos;
+    private Map<BCP, Integer> listaProcessos;
     private static int quantum;
 
     public int getQuantum() {
@@ -16,9 +19,12 @@ public class ProcessosBloqueados {
         this.quantum = 10;
     }
 
+    public Map<BCP, Integer> getListaProcessos() {
+        return this.listaProcessos;
+    }
+
     public void adicionaProcesso(BCP processo) {
-        HashMap<BCP, Integer> processoBloqueado = new HashMap<BCP, Integer>();
-        processoBloqueado.put(processo, this.getQuantum());
+        this.listaProcessos.put(processo, this.getQuantum());
     }
 
     public void liberaProcesso(BCP processo) {
@@ -29,22 +35,22 @@ public class ProcessosBloqueados {
         return this.listaProcessos.size();
     }
 
-    public void listaProcessos() {
-        System.out.print("Fila de processos bloqueados: ");
-        for (BCP bloqueado : this.listaProcessos.keySet()) {
-            System.out.print(bloqueado.nomeProcesso + " ");
-        }
-        System.out.println();
-    }
-
     public void reduzirTempoEspera() {
+        HashMap<BCP, Integer> novaListaBloqueados = new LinkedHashMap<BCP, Integer>();
         for (BCP bloqueado : this.listaProcessos.keySet()) {
             int tempoEspera = this.listaProcessos.get(bloqueado);
-            this.listaProcessos.put(bloqueado, tempoEspera - 1);
+            novaListaBloqueados.put(bloqueado, tempoEspera - 1);
         }
+        this.listaProcessos = novaListaBloqueados;
     }
 
-    public HashMap<BCP, Integer> getListaProcessos() {
-        return this.listaProcessos;
+    @Override
+    public String toString() {
+        String retorno = "";
+        for (BCP processo : this.listaProcessos.keySet()) {
+            retorno += "Processo: " + processo.nomeProcesso + " ";
+            retorno += "Tempo espera: " + this.listaProcessos.get(processo) + " | ";
+        }
+        return retorno;
     }
 }

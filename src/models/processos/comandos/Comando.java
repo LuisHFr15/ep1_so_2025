@@ -24,6 +24,10 @@ public class Comando {
             this.tipo = TipoComando.COMPUTA;
             this.valor = 0;
         }
+        else if (comando.equals("SAIDA")) {
+            this.tipo = TipoComando.SAIDA;
+            this.valor = 0;
+        }
         else {
             throw new IllegalArgumentException("Comando inválido: " + comando);
         }

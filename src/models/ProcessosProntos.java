@@ -32,4 +32,13 @@ public class ProcessosProntos {
         }
         System.out.println();
     }
+
+    @Override
+    public String toString() {
+        String retorno = "";
+        for (BCP processo : this.listaProcessos) {
+            retorno += processo.nomeProcesso + " ";
+        }
+        return retorno;
+    }
 }
