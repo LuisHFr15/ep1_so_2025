@@ -10,10 +10,10 @@ import java.util.ArrayList;
 
 public class BCP {
     public String nomeProcesso;
-    public ContadorDoPrograma contador;
+    private ContadorDoPrograma contador;
     public Estado estado;
     private ArrayList<Registrador> registradores;
-    private SegmentoTexto codigo;
+    public SegmentoTexto codigo;
 
     public BCP(String nomeProcesso, SegmentoTexto codigo) {
         this.nomeProcesso = nomeProcesso;
@@ -23,6 +23,14 @@ public class BCP {
         this.registradores = new ArrayList<Registrador>();
         this.registradores.add(new Registrador('X'));
         this.registradores.add(new Registrador('Y'));
+    }
+
+    public ContadorDoPrograma getContador() {
+        return this.contador;
+    }
+
+    public SegmentoTexto getCodigo() {
+        return this.codigo;
     }
 
     public boolean temComandosParaExecutar() {
@@ -65,5 +73,13 @@ public class BCP {
             }
         }
         throw new IllegalArgumentException("Registrador não encontrado: " + reg);
+    }
+
+    @Override
+    public String toString() {
+        return "BCP{" +
+                "nomeProcesso='" + nomeProcesso + '\'' +
+                ", estado=" + estado +
+                '}';
     }
 }

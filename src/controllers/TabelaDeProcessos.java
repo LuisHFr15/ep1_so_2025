@@ -4,8 +4,8 @@ import models.*;
 import models.processos.*;
 import models.processos.comandos.*;
 
-import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class TabelaDeProcessos {
     private static class TrocaDeProcessos {
@@ -30,13 +30,24 @@ public class TabelaDeProcessos {
     private ArrayList<TrocaDeProcessos> trocasDeProcessos;
     private ArrayList<Integer> instrucoesExecutadas;
 
-
     public TabelaDeProcessos() {
         this.listaProcessos = new ArrayList<BCP>();
         this.listaProntos = new ProcessosProntos();
         this.listaBloqueados = new ProcessosBloqueados();
         this.trocasDeProcessos = new ArrayList<TrocaDeProcessos>();
         this.instrucoesExecutadas = new ArrayList<Integer>();
+    }
+
+    public ArrayList<BCP> getListaProcessos() {
+        return this.listaProcessos;
+    }
+
+    public ProcessosBloqueados getListaBloqueados() {
+        return listaBloqueados;
+    }
+
+    public ProcessosProntos getListaProntos() {
+        return listaProntos;
     }
 
     public void adicionaProcesso(BCP processo) {
@@ -63,17 +74,27 @@ public class TabelaDeProcessos {
         this.listaBloqueados.liberaProcesso(processo);
     }
 
+    private ArrayList<BCP> capturaProcessosParaDesbloquear() {
+        ArrayList<BCP> processosParaDesbloquear = new ArrayList<BCP>();
+        Map<BCP, Integer> bloqueados = this.listaBloqueados.getListaProcessos();
+        for (BCP processo : bloqueados.keySet()) {
+            int tempoEspera = bloqueados.get(processo);
+            System.out.println(processo + " " + tempoEspera);
+            if(tempoEspera <= 0) {
+                processosParaDesbloquear.add(processo);
+            }
+        }
+        return processosParaDesbloquear;
+    }
+
     public boolean desbloqueiaProcessos() {
         if(this.listaBloqueados.tamanhoFila() == 0) {
             return false;
         }
         this.listaBloqueados.reduzirTempoEspera();
-        HashMap<BCP, Integer> bloqueados = this.listaBloqueados.getListaProcessos();
-        for (BCP processo : bloqueados.keySet()) {
-            int tempoEspera = bloqueados.get(processo);
-            if(tempoEspera <= 0) {
-                this.reativaProcesso(processo);
-            }
+        ArrayList<BCP> processosParaDesbloquear = this.capturaProcessosParaDesbloquear();
+        for (BCP processo : processosParaDesbloquear) {
+            this.reativaProcesso(processo);
         }
         return true;
     }
@@ -103,5 +124,23 @@ public class TabelaDeProcessos {
 
     private void completaProcesso(BCP processo) {
         this.listaProcessos.remove(processo);
+    }
+
+    public void printaTrocasDeProcessos() {
+        int index = 0;
+        for(TrocaDeProcessos troca: this.trocasDeProcessos) {
+            String razao;
+            if(troca.razao == 2) {
+                razao = "Finalizado";
+            }
+            else if(troca.razao == 1) {
+                razao = "Bloqueado";
+            }
+            else {
+                razao = "Quantum";
+            }
+            System.out.println("Troca " + index + " " + troca.origem + " -> " + troca.destino + ": " + troca.razao);
+            index++;
+        }
     }
 }

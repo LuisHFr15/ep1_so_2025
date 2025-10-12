@@ -4,8 +4,7 @@ import models.BCP;
 import models.processos.SegmentoTexto;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 public class InputLoader {
     public TabelaDeProcessos tabelaProcessos;
@@ -39,7 +38,9 @@ public class InputLoader {
 
     public TabelaDeProcessos constroiTabelaDeProcessos() throws IOException {
         this.carregaDados();
-        for(String nomeArquivo : this.processosNaoCarregados.keySet()) {
+        List<String> chavesOrdenadas = new ArrayList<>(this.processosNaoCarregados.keySet());
+        Collections.sort(chavesOrdenadas);
+        for(String nomeArquivo : chavesOrdenadas) {
             if(!nomeArquivo.startsWith("quantum")) {
                 BCP processo = this.criaProcesso(this.processosNaoCarregados.get(nomeArquivo));
                 this.tabelaProcessos.adicionaProcesso(processo);

@@ -25,4 +25,13 @@ public class ContadorDoPrograma {
     public Comando executaComando() {
         return this.comandosParaExecutar.poll();
     }
+
+    @Override
+    public String toString() {
+        String str = "";
+        for(Comando c : this.comandosParaExecutar) {
+            str += c.tipo + " " + c.valor + "\n";
+        }
+        return str;
+    }
 }
