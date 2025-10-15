@@ -3,12 +3,14 @@ package controllers;
 import models.*;
 import models.processos.*;
 import models.processos.comandos.*;
+import views.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
 public class TabelaDeProcessos {
-    private static class TrocaDeProcessos {
+    public static class TrocaDeProcessos {
         public BCP origem;
         public BCP destino;
         public int razao;
@@ -42,6 +44,14 @@ public class TabelaDeProcessos {
         return this.listaProcessos;
     }
 
+    public ArrayList<TrocaDeProcessos> getTrocasDeProcessos() {
+        return this.trocasDeProcessos;
+    }
+
+    public ArrayList<Integer> getInstrucoesExecutadas() {
+        return this.instrucoesExecutadas;
+    }
+
     public ProcessosBloqueados getListaBloqueados() {
         return listaBloqueados;
     }
@@ -60,16 +70,14 @@ public class TabelaDeProcessos {
     }
 
     public void bloqueiaProcesso(BCP processo) {
-        this.listaProntos.removeProcesso();
         BCP proximoProcesso = this.pegaProximoProcessoDaFila();
 
         processo.bloqueiaProcesso();
         this.listaBloqueados.adicionaProcesso(processo);
-        this.trocasDeProcessos.add(new TrocaDeProcessos(processo, proximoProcesso, 1));
     }
 
     private void reativaProcesso(BCP processo) {
-        processo.desbloqueiaProcesso();
+        processo.alteraParaPronto();
         this.listaProntos.adicionaProcesso(processo);
         this.listaBloqueados.liberaProcesso(processo);
     }
@@ -79,7 +87,6 @@ public class TabelaDeProcessos {
         Map<BCP, Integer> bloqueados = this.listaBloqueados.getListaProcessos();
         for (BCP processo : bloqueados.keySet()) {
             int tempoEspera = bloqueados.get(processo);
-            System.out.println(processo + " " + tempoEspera);
             if(tempoEspera <= 0) {
                 processosParaDesbloquear.add(processo);
             }
@@ -88,42 +95,62 @@ public class TabelaDeProcessos {
     }
 
     public boolean desbloqueiaProcessos() {
-        if(this.listaBloqueados.tamanhoFila() == 0) {
+        if(!this.listaBloqueados.temProcessosBloqueados()) {
             return false;
         }
         this.listaBloqueados.reduzirTempoEspera();
         ArrayList<BCP> processosParaDesbloquear = this.capturaProcessosParaDesbloquear();
         for (BCP processo : processosParaDesbloquear) {
             this.reativaProcesso(processo);
+            System.out.println("Processo " + processo.nomeProcesso + " desbloqueado");
+            System.out.println(this.getListaProntos());
         }
         return true;
     }
 
-    public boolean temProcessosParaExecutar() {
+    public boolean temProcessosNaoFinalizados() {
+        return this.listaProcessos.size() > 0;
+    }
+
+    public boolean temProcessosProntos() {
         return this.listaProntos.tamanhoFila() > 0;
     }
 
-    public void alteraProcessoParaExecutando(BCP processo) {
+    public void alteraProcessoParaExecutando(BCP processo) throws IOException {
         processo.alteraParaExecutando();
+        FilesIO.adicionaLog(new LogExecutando(processo));
     }
 
     private void adicionaQuantidadeExecutada(int instrucoes) {
         this.instrucoesExecutadas.add(instrucoes);
     }
 
-    public void trocaProcessos(int instrucoes, Comando com) {
+    public void trocaProcessos(int instrucoes, Comando com) throws IOException {
         BCP processoAtual = this.listaProntos.removeProcesso();
         BCP proximoProcesso = this.listaProntos.verProximoProcesso();
         int razao = 0;
-        if(com.tipo == TipoComando.SAIDA) {
+        if(com != null && com.tipo == TipoComando.SAIDA) {
             razao = 2;
+        }
+        else if (com != null && com.tipo == TipoComando.E_S) {
+            razao = 1;
         }
         this.trocasDeProcessos.add(new TrocaDeProcessos(processoAtual, proximoProcesso, razao));
         this.adicionaQuantidadeExecutada(instrucoes);
+
+        if(com != null && com.tipo != TipoComando.SAIDA) {
+            FilesIO.adicionaLog(new LogInterrupcao(processoAtual, instrucoes));
+        }
     }
 
-    private void completaProcesso(BCP processo) {
+    public void prontificaProcesso(BCP processo) {
+        processo.alteraParaPronto();
+        this.listaProntos.adicionaProcesso(processo);
+    }
+
+    public void completaProcesso(BCP processo) throws IOException {
         this.listaProcessos.remove(processo);
+        FilesIO.adicionaLog(new LogFinalizado(processo));
     }
 
     public void printaTrocasDeProcessos() {

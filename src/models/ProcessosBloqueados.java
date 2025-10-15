@@ -31,8 +31,8 @@ public class ProcessosBloqueados {
         this.listaProcessos.remove(processo);
     }
 
-    public int tamanhoFila() {
-        return this.listaProcessos.size();
+    public boolean temProcessosBloqueados() {
+        return this.listaProcessos.size() > 0;
     }
 
     public void reduzirTempoEspera() {

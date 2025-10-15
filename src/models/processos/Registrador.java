@@ -12,7 +12,8 @@ public class Registrador {
         this.valor = valor;
     }
 
-    public int getValor() {
-        return valor;
+    @Override
+    public String toString() {
+        return reg + "=" + valor;
     }
 }
