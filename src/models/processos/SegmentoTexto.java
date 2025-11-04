@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SegmentoTexto {
-    public static final int TAMANHO_MAXIMO = 21;
+    // Primeira posicao = nome do teste, então o tamanho máximo do array será 22 para suportar o nome do processo + comandos
+    public static final int TAMANHO_MAXIMO = 22;
 
     private final List<String> instrucoes;
 

@@ -33,6 +33,10 @@ public class BCP {
         return this.codigo;
     }
 
+    public ArrayList<Registrador> getRegistradores() {
+        return this.registradores;
+    }
+
     public boolean temComandosParaExecutar() {
         return this.contador.temComandosParaExecutar();
     }
@@ -45,7 +49,7 @@ public class BCP {
         this.estado = Estado.BLOQUEADO;
     }
 
-    public void desbloqueiaProcesso() {
+    public void alteraParaPronto() {
         this.estado = Estado.PRONTO;
     }
 

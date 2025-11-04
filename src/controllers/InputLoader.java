@@ -2,6 +2,7 @@ package controllers;
 
 import models.BCP;
 import models.processos.SegmentoTexto;
+import views.LogLoad;
 
 import java.io.IOException;
 import java.util.*;
@@ -15,10 +16,6 @@ public class InputLoader {
         this.tabelaProcessos = new TabelaDeProcessos();
         this.quantum = 0;
         this.processosNaoCarregados = new HashMap<String, SegmentoTexto>();
-    }
-
-    public int getQuantum() {
-        return this.quantum;
     }
 
     private void carregaDados() throws IOException {
@@ -43,11 +40,20 @@ public class InputLoader {
         for(String nomeArquivo : chavesOrdenadas) {
             if(!nomeArquivo.startsWith("quantum")) {
                 BCP processo = this.criaProcesso(this.processosNaoCarregados.get(nomeArquivo));
+                FilesIO.adicionaLog(new LogLoad(processo));
                 this.tabelaProcessos.adicionaProcesso(processo);
             }
             else {
                 String valor = this.processosNaoCarregados.get(nomeArquivo).pegaInstrucaoAuxiliar();
-                this.quantum = Integer.parseInt(valor);
+                int valorQuantum = Integer.parseInt(valor);
+                this.quantum = valorQuantum;
+                if(valorQuantum < 10) {
+                    valor = "0" + String.valueOf(valorQuantum);
+                }
+                else {
+                    valor = String.valueOf(valorQuantum);
+                }
+                FilesIO.setQuantum(valor);
             }
         }
         return this.tabelaProcessos;
