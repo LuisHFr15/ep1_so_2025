@@ -27,15 +27,22 @@ public class Escalonador {
 
             int instrucoes = 0;
             Comando com = null;
-            while(instrucoes < quantum) {
+            while(instrucoes < quantum && atual.temComandosParaExecutar()) {
                 com = atual.executaProcesso();
                 instrucoes++;
 
+                if(com == null) {
+                    break;
+                }
                 if(com.tipo == TipoComando.E_S || com.tipo == TipoComando.SAIDA) {
                     break;
                 }
             }
             tabela.trocaProcessos(instrucoes, com);
+            if(com == null) {
+                tabela.completaProcesso(atual);
+                continue;
+            }
             if(com.tipo == TipoComando.E_S) {
                 tabela.bloqueiaProcesso(atual);
             }

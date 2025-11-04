@@ -1,0 +1,37 @@
+Carregando TESTE-1
+Carregando TESTE-2
+Carregando TESTE-3
+Carregando TESTE-4
+Carregando TESTE-5
+Carregando TESTE-6
+Carregando TESTE-7
+Carregando TESTE-8
+Carregando TESTE-9
+Carregando TESTE-10
+Executando TESTE-1
+TESTE-1 terminado. X=3. Y=1. 
+Executando TESTE-2
+TESTE-2 terminado. X=1. Y=0. 
+Executando TESTE-3
+TESTE-3 terminado. X=0. Y=0. 
+Executando TESTE-4
+TESTE-4 terminado. X=0. Y=3. 
+Executando TESTE-5
+TESTE-5 terminado. X=8. Y=5. 
+Executando TESTE-6
+TESTE-6 terminado. X=8. Y=5. 
+Executando TESTE-7
+TESTE-7 terminado. X=12. Y=3. 
+Executando TESTE-8
+Interrompendo TESTE-8 após 21 instruções
+Executando TESTE-9
+Interrompendo TESTE-9 após 3 instruções
+Executando TESTE-10
+TESTE-10 terminado. X=0. Y=0. 
+Executando TESTE-8
+TESTE-8 terminado. X=12. Y=3. 
+Executando TESTE-9
+TESTE-9 terminado. X=0. Y=0. 
+MEDIA DE TROCAS 1.09
+MEDIA DE INTRUCOES 9.17
+QUANTUM 21
